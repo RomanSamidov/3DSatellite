@@ -22,53 +22,70 @@ public class Camera {
         focused = false;
     }
 
-    public void setFocus(Vector3f newFocus, Vector3f rotation) {
+    public void setFocus(Vector3f newFocus, Vector3f rotation1) {
+        System.out.println(this.rotation.x + "     " + this.rotation.y);
         focus = new Vector3f(newFocus);
-        Vector3f focusPosition = new Vector3f(0,0,1);
+        Vector3f focusPosition = new Vector3f(0,0,-1);
         focus.x = focus.x - position.x;
         focus.y = focus.y - position.y;
         focus.z = focus.z - position.z;
 
+        float savedf = focus.z;
+
+        //focus.z = (float)(focus.x*0.5 + focus.z*0.5);
+
+        if(focus.z<0) {focus.z = focus.z - Math.abs(focus.x);}
+        else {focus.z = focus.z + Math.abs(focus.x);}
+
+     //   if(Math.abs(focus.x) > Math.abs(focus.z)) { focus.z = focus.x;}
+
         boolean changeSign = false;
         if(focus.y > 0) {
             changeSign = true;
-           // focus.y = - focus.y;
+//            focus.y = - focus.y;
         }
-
+//
         // Получим косинус угла по формуле
         double cos = (focusPosition.y*focus.y + focusPosition.z*focus.z) /
                 (Math.sqrt(focusPosition.y*focusPosition.y + focusPosition.z*focusPosition.z) *
                         Math.sqrt(focus.y*focus.y + focus.z*focus.z));
-//        // Вернем arccos полученного значения (в радианах!)
+        // Вернем arccos полученного значения (в радианах!)
         Float angl =  (float) Math.acos(cos);
         angl = (float)(angl*180/3.14);
-        System.out.println(angl);
         if(!angl.isNaN()) {
-                for(rotation.x = angl; rotation.x > 360; rotation.x = rotation.x - 360) {
+                for(rotation.x = angl; rotation.x > 360; rotation.x = rotation.x - 360) {}
+            System.out.println(rotation.x);
+               if(changeSign) {
+                   System.out.println("dddddd");
+                   rotation.x = -rotation.x;
+//                   focus.y = - focus.y;
+               }
+            rotation.y = 0;
+            if(rotation.x < -90 | rotation.x > 90) {
+                rotation.x = (180 - rotation.x);
+               // rotation.y = 180;
             }
-               if(changeSign) rotation.x = -rotation.x;
         }
-//        changeSign = false;
+        changeSign = false;
+        focus.z = savedf;
 
-//
-//        if(focus.y < 0) {
-//            changeSign = true;
-//            // focus.y = - focus.y;
-//        }
-//        System.out.println(focus);
-//        // Получим косинус угла по формуле
-//        cos = (focusPosition.x*focus.x + focusPosition.z*focus.z) /
-//                (Math.sqrt(focusPosition.x*focusPosition.x + focusPosition.z*focusPosition.z) *
-//                        Math.sqrt(focus.x*focus.x + focus.z*focus.z));
-//        // Вернем arccos полученного значения (в радианах!)
-//        angl =  (float) Math.acos(cos);
-//        angl = (float)(angl*180/3.14);
-//        System.out.println(angl);
-//        if(!angl.isNaN()) {
-//            for(rotation.y = angl; rotation.y > 360; rotation.y = rotation.y - 360) {
-//            }
-//            if(changeSign) rotation.y = -rotation.y;
-//        }
+        if(focus.x < 0) {
+            changeSign = true;
+     //        focus.x = - focus.x;
+        }
+        // Получим косинус угла по формуле
+        cos = (focusPosition.x*focus.x + focusPosition.z*focus.z) /
+                (Math.sqrt(focusPosition.x*focusPosition.x + focusPosition.z*focusPosition.z) *
+                        Math.sqrt(focus.x*focus.x + focus.z*focus.z));
+        // Вернем arccos полученного значения (в радианах!)
+        angl =  (float) Math.acos(cos);
+        angl = (float)(angl*180/3.14);
+        if(!angl.isNaN()) {
+            for(rotation.y += angl; rotation.y > 360; rotation.y = rotation.y - 360) {
+            }
+            System.out.println(rotation.y);
+            if(changeSign) rotation.y = 360 - rotation.y;
+        }
 
 
 
@@ -103,6 +120,11 @@ public class Camera {
             position.z += (float)Math.cos(Math.toRadians(rotation.y - 90)) * offsetX;
         }
         position.y += offsetY;
+//
+//        position.x += offsetX;
+//        position.y += offsetY;
+//        position.z += offsetZ;
+
     }
 
     public Vector3f getRotation() {

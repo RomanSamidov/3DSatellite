@@ -316,9 +316,11 @@ renderer.camera.setPosition(0,10,10);
                 ix+= 1.1;
                 gameItems.get(1).setRotation(0, 0, ix);
                 gameItems.get(2).setRotation(0, ix, 0);
-                gameItems.get(3).setRotation(ix, 0,0);
+               // gameItems.get(3).setRotation(ix, 0,0);
 
-               renderer.camera.setFocus(gameItems.get(0).getPosition(), gameItems.get(0).getRotation());
+               renderer.camera.setFocus(gameItems.get(3).getPosition(), gameItems.get(3).getRotation());
+           //    gameItems.get(3).getRotation().y = ix;
+
 
                 gameItems.get(gameItems.size()-1).setPosition(renderer.camera.getPosition());
                 renderer.render(window, gameItems);
