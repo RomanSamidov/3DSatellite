@@ -99,34 +99,6 @@ public class MenuStage extends MainGameStage {
                 0.5f, -0.5f, 0.5f,
         };
 
-//        positions = new float[] {
-//                // V0
-//                -1f, -1f, -1f,
-//                // V1
-//                1f, -1f, -1f,
-//                // V2
-//                1f, -1f, 1f,
-//                // V3
-//                -1f, -1f, 1f,
-//                // V4
-//                0f, 0.0f, 0f
-//
-//        };
-
-
-
-//        positions = new float[] {
-//                -0.5f,  0.5f,  0.5f, //    0
-//                0.5f,  0.5f,  0.5f, //    1
-//                0.5f, -0.5f,  0.5f, //    2
-//                -0.5f, -0.5f,  0.5f, //    3
-//                -0.5f,  0.5f, -0.5f, //    4
-//                0.5f,  0.5f, -0.5f, //    5
-//                0.5f, -0.5f, -0.5f, //    6
-//                -0.5f, -0.5f, -0.5f, //    7
-//        };
-
-
         float[] textCoords = new float[]{
                 0.0f, 0.0f,
                 0.0f, 0.5f,
@@ -159,31 +131,6 @@ public class MenuStage extends MainGameStage {
                 1.0f, 0.5f,
         };
 
-//        textCoords = new float[]{
-//                0.5f, 0f,
-//                1f, 0f,
-//                1f, 0.5f,
-//                0.5f, 0.5f,
-//
-//                0.0f, 0.0f,
-//
-//        };
-
-
-//        textCoords = new float[]{
-//                0, 0, // 0
-//                1, 0, // 1
-//                1, 1, // 2
-//                0, 1, // 3
-//                0, 0, // 4
-//                1, 0, // 5
-//                1, 1, // 6
-//                0, 1, // 7
-//
-//        };
-
-
-
         int[] indices = new int[]{
                 // Front face
                 0, 1, 3, 3, 1, 2,
@@ -198,34 +145,6 @@ public class MenuStage extends MainGameStage {
                 // Back face
                 4, 6, 7, 5, 4, 7,};
 
-//        indices = new int[]{
-//                // Front face
-//                4, 2, 3,
-//                // Right face
-//                4, 1, 2,
-//                // Left face
-//                4, 0, 3,
-//                // Bottom face
-//                0, 1, 2, 2, 3, 0,
-//                // Back face
-//                4, 0, 1
-//                          };
-
-//        indices = new int[]{
-//                0, 1, 2,
-//                2, 3, 0,  // 1 side
-//                1, 5, 6,
-//                6, 2, 1,  // 2 side
-//                5, 4, 7,
-//                7, 6, 5,  // 3 side
-//                4, 0, 3,
-//                3, 7, 4,  // 4 side
-//                0, 4, 5,
-//                5, 1, 0,  // 5 side
-//                3, 7, 6,
-//                6, 2, 3   // 6 side
-//                 };
-
         renderer = new Renderer();
         renderer.init(window);
 
@@ -233,26 +152,12 @@ public class MenuStage extends MainGameStage {
 
         Texture texture = new Texture("src/main/resources/grassblock.png");
         Mesh mesh = new Mesh(positions, textCoords, indices, texture);
-        GameItem gameItem = new GameItem(mesh);
-        gameItem.setPosition(0, 1, 1);
-        gameItem.setScale(3);
-        gameItems.add(gameItem);
 
-
-        NewMesh[] houseMesh = NewStaticMeshesLoader.load("src/main/resources/Satelite2/Satellite.obj", "src/main/resources/Satelite2/text");
-        GameItem satellite0 = new GameItem(houseMesh);
-        satellite0.setPosition(20,1,-10);
-        satellite0.setScale(1);
+        NewMesh[] satelliteMesh = NewStaticMeshesLoader.load("src/main/resources/Satelite2/Satellite.obj", "src/main/resources/Satelite2/text");
+        GameItem satellite0 = new GameItem(satelliteMesh);
+        satellite0.setPosition(0,0,0);
+        satellite0.setScale(2);
         gameItems.add(satellite0);
-
-        GameItem satellite1 = new GameItem(houseMesh);
-        satellite1.setPosition(10,1,-10);
-        satellite1.setScale(1);
-        gameItems.add(satellite1);
-        GameItem satellite2 = new GameItem(houseMesh);
-        satellite2.setPosition(-5,1,-10);
-        satellite2.setScale(1);
-        gameItems.add(satellite2);
 
         GameItem skyBox = new GameItem(mesh);
         Vector3f vector3f = renderer.camera.getPosition();
@@ -260,12 +165,7 @@ public class MenuStage extends MainGameStage {
         skyBox.setScale(1000);
         gameItems.add(skyBox);
 
-  //      gameItems = new GameItem[]{house};
-
-
-
-        float ix = 0;
-renderer.camera.setPosition(0,10,10);
+        renderer.camera.setPosition(0,10,20);
 
         //while (!window.shouldClose()) {
         while (!stop && !window.windowShouldClose()) {
@@ -312,19 +212,10 @@ renderer.camera.setPosition(0,10,10);
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-                ix+= 1.1;
-                gameItems.get(1).setRotation(0, 0, ix);
-                gameItems.get(2).setRotation(0, ix, 0);
-               // gameItems.get(3).setRotation(ix, 0,0);
-
-               renderer.camera.setFocus(gameItems.get(3).getPosition(), gameItems.get(3).getRotation());
-           //    gameItems.get(3).getRotation().y = ix;
-
+                renderer.camera.setFocus(gameItems.get(0).getPosition(), gameItems.get(0).getRotation());
 
                 gameItems.get(gameItems.size()-1).setPosition(renderer.camera.getPosition());
                 renderer.render(window, gameItems);
-                //cub.render();
 
                 gui.render();
                 window.swapBuffers();
@@ -338,7 +229,7 @@ renderer.camera.setPosition(0,10,10);
     }
 
     public void keyIsPressed(int key) {
-        Vector3f vec1 = renderer.camera.getPosition();
+        Vector3f v = gameItems.get(0).getRotation();
         switch (key) {
             case GLFW_KEY_ESCAPE:
                 glfwSetWindowShouldClose(window.getWindow(), true);
@@ -371,6 +262,34 @@ renderer.camera.setPosition(0,10,10);
                     pause = !pause;
                 }
                 break;
+            case GLFW_KEY_8:
+            case GLFW_KEY_KP_8:
+                gameItems.get(0).setRotation(v.x, v.y, v.z+1);
+                break;
+            case GLFW_KEY_2:
+            case GLFW_KEY_KP_2:
+                gameItems.get(0).setRotation(v.x, v.y, v.z-1);
+                break;
+            case GLFW_KEY_6:
+            case GLFW_KEY_KP_6:
+                gameItems.get(0).setRotation(v.x+1, v.y, v.z);
+                break;
+            case GLFW_KEY_4:
+            case GLFW_KEY_KP_4:
+                gameItems.get(0).setRotation(v.x-1, v.y, v.z);
+                break;
+            case GLFW_KEY_MINUS:
+            case GLFW_KEY_KP_SUBTRACT:
+                gameItems.get(0).setRotation(v.x, v.y-1, v.z);
+                break;
+            case GLFW_KEY_EQUAL:
+            case GLFW_KEY_KP_ADD:
+                gameItems.get(0).setRotation(v.x, v.y+1, v.z);
+                break;
+
+            case GLFW_KEY_KP_5:
+                gameItems.get(0).setRotation(0, 0, 0);
+                break;
         }
     }
 
@@ -395,10 +314,8 @@ renderer.camera.setPosition(0,10,10);
                         }
                     }
                 }
-                renderer.camera.moveRotation(0,0,(float) 1);
                 break;
             case GLFW_MOUSE_BUTTON_RIGHT:
-           // renderer.camera.moveRotation(0,(float) -1,0);
                 Vector2f rotVec = Input.getDisplVec();
                 renderer.camera.moveRotation(rotVec.y * MOUSE_SENSITIVITY, rotVec.x * MOUSE_SENSITIVITY, 0);
             break;

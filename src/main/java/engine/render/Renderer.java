@@ -26,7 +26,7 @@ public class Renderer {
         transformation = new Transformation();
     }
 
-    public void init(Window window) throws Exception {
+    public void init(Window window){
         // Create shader
         shaderProgram = new ShaderProgram("shader2");
  //       shaderProgram.link();
@@ -55,8 +55,7 @@ public class Renderer {
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
-
-// Update view Matrix
+        // Update view Matrix
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
 
         shaderProgram.setUniform("texture_sampler", 0);

@@ -23,7 +23,6 @@ public class Camera {
     }
 
     public void setFocus(Vector3f newFocus, Vector3f rotation1) {
-        System.out.println(this.rotation.x + "     " + this.rotation.y);
         focus = new Vector3f(newFocus);
         Vector3f focusPosition = new Vector3f(0,0,-1);
         focus.x = focus.x - position.x;
@@ -32,19 +31,13 @@ public class Camera {
 
         float savedf = focus.z;
 
-        //focus.z = (float)(focus.x*0.5 + focus.z*0.5);
-
         if(focus.z<0) {focus.z = focus.z - Math.abs(focus.x);}
         else {focus.z = focus.z + Math.abs(focus.x);}
-
-     //   if(Math.abs(focus.x) > Math.abs(focus.z)) { focus.z = focus.x;}
 
         boolean changeSign = false;
         if(focus.y > 0) {
             changeSign = true;
-//            focus.y = - focus.y;
         }
-//
         // Получим косинус угла по формуле
         double cos = (focusPosition.y*focus.y + focusPosition.z*focus.z) /
                 (Math.sqrt(focusPosition.y*focusPosition.y + focusPosition.z*focusPosition.z) *
@@ -54,16 +47,12 @@ public class Camera {
         angl = (float)(angl*180/3.14);
         if(!angl.isNaN()) {
                 for(rotation.x = angl; rotation.x > 360; rotation.x = rotation.x - 360) {}
-            System.out.println(rotation.x);
                if(changeSign) {
-                   System.out.println("dddddd");
                    rotation.x = -rotation.x;
-//                   focus.y = - focus.y;
                }
             rotation.y = 0;
             if(rotation.x < -90 | rotation.x > 90) {
                 rotation.x = (180 - rotation.x);
-               // rotation.y = 180;
             }
         }
         changeSign = false;
@@ -71,7 +60,6 @@ public class Camera {
 
         if(focus.x < 0) {
             changeSign = true;
-     //        focus.x = - focus.x;
         }
         // Получим косинус угла по формуле
         cos = (focusPosition.x*focus.x + focusPosition.z*focus.z) /
@@ -83,11 +71,8 @@ public class Camera {
         if(!angl.isNaN()) {
             for(rotation.y += angl; rotation.y > 360; rotation.y = rotation.y - 360) {
             }
-            System.out.println(rotation.y);
             if(changeSign) rotation.y = 360 - rotation.y;
         }
-
-
 
         focused = true;
     }
