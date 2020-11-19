@@ -1,5 +1,6 @@
 package engine.assets;
 
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 
@@ -11,6 +12,7 @@ public class GameItem {
     private final Vector3f position;
     private float scale;
     private final Vector3f rotation;
+    private final Quaternionf rotationQ;
     private boolean hasNewMesh;
 
 
@@ -18,6 +20,7 @@ public class GameItem {
         position = new Vector3f();
         scale = 1;
         rotation = new Vector3f();
+        rotationQ = new Quaternionf();
     }
 
     public GameItem(Mesh mesh) {
@@ -62,10 +65,17 @@ public class GameItem {
         return rotation;
     }
 
+    public Quaternionf getQuatRotation() {
+        return rotationQ;
+    }
+
     public void setRotation(float x, float y, float z) {
-        this.rotation.x = x;
-        this.rotation.y = y;
-        this.rotation.z = z;
+        rotationQ.rotateAxis((float)Math.toRadians(z), new Vector3f(0f, 0f, 1f)).
+        rotateAxis((float)Math.toRadians(y), new Vector3f(0f, 1f, 0f)).
+        rotateAxis((float)Math.toRadians(x), new Vector3f(1f, 0f, 0f));
+//        this.rotation.x = x;
+//        this.rotation.y = y;
+//        this.rotation.z = z;
     }
 
     public Mesh getMesh() {

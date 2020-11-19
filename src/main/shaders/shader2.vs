@@ -13,6 +13,8 @@ void main()
 {
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+
 //   vec4 vec = projectionMatrix * worldMatrix * viewMatrix * vec4(position, 1.0);
  ////   vec4 saved = vec;
 
@@ -22,14 +24,6 @@ void main()
  //   mat4 modelViewMatrix = viewMatrix * modelInstancedMatrix;
 //	vec4 vs_mvVertexPos = modelViewMatrix * vec4(position, 1.0);
  //   gl_Position = projectionMatrix * vs_mvVertexPos;
-
-
-
-
-
-
-
-
 
     //   mat4 matr = mat4(1, 0, 0, 0, 0, cos(camRot.x), -sin(camRot.x), 0, 0, sin(camRot.x), cos(camRot.x), 0, 0, 0, 0, 0);
 //    vec = saved * matr;\
