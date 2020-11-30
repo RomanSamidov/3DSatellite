@@ -150,8 +150,8 @@ public class MenuStage extends MainGameStage {
 
         gameItems = new ArrayList<>();
 
-        Texture texture = new Texture("src/main/resources/grassblock.png");
-        Mesh mesh = new Mesh(positions, textCoords, indices, texture);
+//        Texture texture = new Texture("src/main/resources/8k_stars.jpg");
+//        Mesh mesh = new Mesh(positions, textCoords, indices, texture);
 
         NewMesh[] satelliteMesh = NewStaticMeshesLoader.load("src/main/resources/Satelite2/Satellite.obj", "src/main/resources/Satelite2/text");
         GameItem satellite0 = new GameItem(satelliteMesh);
@@ -159,13 +159,15 @@ public class MenuStage extends MainGameStage {
         satellite0.setScale(2);
         gameItems.add(satellite0);
 
+        NewMesh[] mesh = NewStaticMeshesLoader.load("src/main/resources/untitled.obj", "src/main/resources/");
         GameItem skyBox = new GameItem(mesh);
         Vector3f vector3f = renderer.camera.getPosition();
         skyBox.setPosition(vector3f.x, vector3f.y, vector3f.z);
-        skyBox.setScale(1000);
+        skyBox.setScale(30);
         gameItems.add(skyBox);
-
         renderer.camera.setPosition(0,10,20);
+        renderer.camera.setFocus(gameItems.get(0).getPosition(), gameItems.get(0).getRotation());
+
 
         //while (!window.shouldClose()) {
         while (!stop && !window.windowShouldClose()) {
@@ -212,6 +214,7 @@ public class MenuStage extends MainGameStage {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+                if(renderer.camera.isFocused())
                 renderer.camera.setFocus(gameItems.get(0).getPosition(), gameItems.get(0).getRotation());
 
                 gameItems.get(gameItems.size()-1).setPosition(renderer.camera.getPosition());
@@ -256,6 +259,12 @@ public class MenuStage extends MainGameStage {
             case GLFW_KEY_N:
 //                window.swapBuffers();
 //                again = true;
+                break;
+            case GLFW_KEY_F:
+                if(renderer.camera.isFocused()) renderer.camera.setFocused(false);
+                else
+                renderer.camera.setFocus(gameItems.get(0).getPosition(), gameItems.get(0).getRotation());
+
                 break;
             case GLFW_KEY_O:
                 if(Input.isKeyPressed(key)) {
