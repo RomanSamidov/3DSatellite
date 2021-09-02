@@ -68,6 +68,7 @@ public class Renderer {
             // Render the mes for this game item
             if(gameItem.isHasNewMesh()) {
                 for(Mesh mesh : gameItem.getMeshes()) {
+                    if(mesh.needToRender())
                     mesh.render();
                 }
             } else gameItem.getMesh().render();

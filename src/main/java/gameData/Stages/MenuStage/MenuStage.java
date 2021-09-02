@@ -7,6 +7,7 @@ import engine.io.Timer;
 import engine.io.Window;
 import engine.render.Camera;
 import engine.render.Renderer;
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -25,6 +26,9 @@ public class MenuStage extends MainGameStage {
     private ArrayList<GameItem> gameItems;
     private Renderer renderer;
     private static final Window window = Window.windows;
+    private static Satellit satellit;///////////////////////////////////////////////////////
+    NewMesh[] satelliteMesh;
+
     public MenuStage() {
 
     }
@@ -42,7 +46,7 @@ public class MenuStage extends MainGameStage {
         double timeWastLogik = 0, timeWastRender = 0, savedtime;
 
 
-        double time = Timer.getTime(), unprocessed = 0, timeInGame = 0;
+        double time = Timer.getTime(), unprocessed = 0;
         startTime = Timer.getTime();
         boolean can_render;
 
@@ -153,11 +157,13 @@ public class MenuStage extends MainGameStage {
 //        Texture texture = new Texture("src/main/resources/8k_stars.jpg");
 //        Mesh mesh = new Mesh(positions, textCoords, indices, texture);
 
-        NewMesh[] satelliteMesh = NewStaticMeshesLoader.load("src/main/resources/Satelite2/Satellite.obj", "src/main/resources/Satelite2/text");
+        satelliteMesh = NewStaticMeshesLoader.load("src/main/resources/Satelite/Satellite.obj", "src/main/resources/Satelite/text");
+       System.out.println(satelliteMesh.length);
         GameItem satellite0 = new GameItem(satelliteMesh);
         satellite0.setPosition(0,0,0);
         satellite0.setScale(2);
         gameItems.add(satellite0);
+        satellit = new Satellit();//////////////////////////////////////////////////
 
         NewMesh[] mesh = NewStaticMeshesLoader.load("src/main/resources/untitled.obj", "src/main/resources/");
         GameItem skyBox = new GameItem(mesh);
@@ -168,7 +174,8 @@ public class MenuStage extends MainGameStage {
         renderer.camera.setPosition(0,10,20);
         renderer.camera.setFocus(gameItems.get(0).getPosition(), gameItems.get(0).getRotation());
 
-
+        int hidenConus = 5, timerrr = 0;
+        satelliteMesh[5].setNeedToRender(false);
         //while (!window.shouldClose()) {
         while (!stop && !window.windowShouldClose()) {
             can_render = false;
@@ -185,10 +192,10 @@ public class MenuStage extends MainGameStage {
             }
 
             if (again) {
-                timeInGame = 0;
                 again = false;
                 startTime = Timer.getTime();
             }
+
 
 
             while (unprocessed >= frame_cap) {
@@ -201,17 +208,27 @@ public class MenuStage extends MainGameStage {
                 } else startTime = Timer.getTime();
                 window.update();
                 timeWastLogik += Timer.getTime() - savedtime;
-
             }
 
             if (frame_time >= 1.0) {
                 frame_time = 0;
                 System.out.println("FPS: " + frames);
+                for(int i = 5; i <= 16; i++) {
+                    satelliteMesh[i].setNeedToRender(false);
+                }
                 frames = 0;
             }
             if (can_render) {
                 savedtime = Timer.getTime();
 
+
+
+
+                //////////////////////////////////////////////////////////////////////
+
+                gameItems.get(0).rotate( satellit.calculation(frame_cap));
+
+                /////////////////////////////////////////////////////////////////////
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 if(renderer.camera.isFocused())
@@ -266,38 +283,67 @@ public class MenuStage extends MainGameStage {
                 renderer.camera.setFocus(gameItems.get(0).getPosition(), gameItems.get(0).getRotation());
 
                 break;
-            case GLFW_KEY_O:
-                if(Input.isKeyPressed(key)) {
-                    pause = !pause;
-                }
-                break;
-            case GLFW_KEY_8:
             case GLFW_KEY_KP_8:
-                gameItems.get(0).setRotation(v.x, v.y, v.z+1);
+//                gameItems.get(0).setRotation(v.x, v.y, v.z+1);
+                satelliteMesh[9].setNeedToRender(true);
+                satelliteMesh[12].setNeedToRender(true);
+
+                satellit.setControls(satellit.M1,satellit.M2,1);
+
+             /////////////   \\\\\\\\\\\\\\\\\\//////////////////////////////////
                 break;
-            case GLFW_KEY_2:
             case GLFW_KEY_KP_2:
-                gameItems.get(0).setRotation(v.x, v.y, v.z-1);
+//                gameItems.get(0).setRotation(v.x, v.y, v.z-1);
+                satelliteMesh[10].setNeedToRender(true);
+                satelliteMesh[11].setNeedToRender(true);
+                satellit.setControls(satellit.M1,satellit.M2,-1);
+                /////////////////////////////////////////////////////////////////
                 break;
-            case GLFW_KEY_6:
             case GLFW_KEY_KP_6:
-                gameItems.get(0).setRotation(v.x+1, v.y, v.z);
+                satelliteMesh[5].setNeedToRender(true);
+                satelliteMesh[6].setNeedToRender(true);
+//                gameItems.get(0).setRotation(v.x+1, v.y, v.z);
+                satellit.setControls(+1,satellit.M2,satellit.M3);
                 break;
-            case GLFW_KEY_4:
             case GLFW_KEY_KP_4:
-                gameItems.get(0).setRotation(v.x-1, v.y, v.z);
+                satelliteMesh[7].setNeedToRender(true);
+                satelliteMesh[8].setNeedToRender(true);
+//                gameItems.get(0).setRotation(v.x-1, v.y, v.z);
+                satellit.setControls(-1,satellit.M2,satellit.M3);
                 break;
             case GLFW_KEY_MINUS:
             case GLFW_KEY_KP_SUBTRACT:
-                gameItems.get(0).setRotation(v.x, v.y-1, v.z);
+                satelliteMesh[13].setNeedToRender(true);
+                satelliteMesh[15].setNeedToRender(true);
+//                gameItems.get(0).setRotation(v.x, v.y-1, v.z);
+                satellit.setControls(satellit.M1,-1,satellit.M3);
                 break;
             case GLFW_KEY_EQUAL:
             case GLFW_KEY_KP_ADD:
-                gameItems.get(0).setRotation(v.x, v.y+1, v.z);
+                satelliteMesh[14].setNeedToRender(true);
+                satelliteMesh[16].setNeedToRender(true);
+//                gameItems.get(0).setRotation(v.x, v.y+1, v.z);
+                satellit.setControls(satellit.M1,1,satellit.M3);
                 break;
 
             case GLFW_KEY_KP_5:
-                gameItems.get(0).setRotation(0, 0, 0);
+                if(Input.isKeyPressed(key)) {
+                    satelliteMesh[5].setNeedToRender(false);
+                    satelliteMesh[6].setNeedToRender(false); satelliteMesh[11].setNeedToRender(false);
+                    satelliteMesh[7].setNeedToRender(false); satelliteMesh[13].setNeedToRender(false);
+                    satelliteMesh[8].setNeedToRender(false); satelliteMesh[15].setNeedToRender(false);
+                    satelliteMesh[9].setNeedToRender(false); satelliteMesh[14].setNeedToRender(false);
+                    satelliteMesh[12].setNeedToRender(false); satelliteMesh[16].setNeedToRender(false);
+                    satelliteMesh[10].setNeedToRender(false);
+                    gameItems.get(0).setQuatRotation(new Quaternionf(0,0,0,1));
+                    satellit = new Satellit();
+                }
+                break;
+            case GLFW_KEY_1:
+                if(Input.isKeyPressed(key)) {
+                    pause = !pause;
+                    System.out.println(pause);
+                }
                 break;
         }
     }

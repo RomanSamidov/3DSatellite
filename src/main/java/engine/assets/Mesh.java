@@ -20,6 +20,7 @@ public class Mesh {
     private final List<Integer> vboIdList;
     private final int vertexCount;
     private final Texture texture;
+    private boolean needToRender = true;
 
     public Mesh() {
         vaoId =0;
@@ -89,6 +90,14 @@ public class Mesh {
 
     public int getVertexCount() {
         return vertexCount;
+    }
+
+    public void setNeedToRender(boolean need) {
+        needToRender = need;
+    }
+
+    public boolean needToRender() {
+        return needToRender;
     }
 
     public void render() {
